@@ -7,7 +7,7 @@ This checklist is the minimum launch gate before submitting SelectLens to the Ch
 Submission is only ready when all items below are checked:
 
 - [x] Icons ready
-- [ ] Screenshots ready
+- [x] Screenshots ready
 - [ ] Store copy approved
 - [ ] Privacy notes verified
 - [ ] Final submission review complete
@@ -44,12 +44,24 @@ Submission is only ready when all items below are checked:
 
 Do not just capture random product screens. Each screenshot should communicate one clear benefit.
 
+### Before capture
+- [ ] Use a consistent browser window size for all screenshots
+- [ ] Close unrelated tabs, notifications, and distracting UI
+- [ ] Keep the selected text short enough to remain readable in the store listing
+- [ ] Use realistic, non-sensitive technical content
+- [ ] Ensure the SelectLens UI state shown in the screenshot matches the shipped build
+
 ### Screenshot 1 — Core trigger
 - **Filename:** `01-select-text-trigger.png`
 - **Goal:** Show the main interaction clearly
 - **Scene:** User selects text on a real webpage and SelectLens reaction is visible
 - **Must show:** Real webpage context + selected text + extension UI trigger state
 - **Notes:** This should explain the product in one glance
+- **Capture instructions:**
+  - Use a clean technical article, documentation page, or simple demo page
+  - Select a short Base64 string or timestamp that is visually easy to spot
+  - Trigger SelectLens so the extension response is visible next to the selected text
+  - Frame the shot so users can immediately understand “select text → get insight”
 
 ### Screenshot 2 — Base64 parsing result
 - **Filename:** `02-base64-result.png`
@@ -57,6 +69,11 @@ Do not just capture random product screens. Each screenshot should communicate o
 - **Scene:** A Base64 string is selected and the result UI is visible
 - **Must show:** Selected Base64 input + readable decoded output
 - **Notes:** Avoid fake-looking demo text if possible
+- **Capture instructions:**
+  - Use a documentation-style or test page with a readable Base64 example
+  - Example source text can be a short Base64 string that decodes into plain English
+  - Make sure the SelectLens UI clearly shows the original selected value and the decoded result
+  - Keep the decoded output visually prominent so the value of the extension is obvious
 
 ### Screenshot 3 — Timestamp parsing result
 - **Filename:** `03-timestamp-result.png`
@@ -64,6 +81,11 @@ Do not just capture random product screens. Each screenshot should communicate o
 - **Scene:** A 10-digit or 13-digit timestamp is selected and parsed
 - **Must show:** Raw timestamp + human-readable time result
 - **Notes:** Use a realistic timestamp example
+- **Capture instructions:**
+  - Use a page that looks like logs, API docs, or a realistic debugging example
+  - Select a 10-digit or 13-digit Unix timestamp from the page content
+  - Trigger SelectLens and show the readable converted time in the result UI
+  - Keep both the raw timestamp and the parsed time visible in the same composition
 
 ### Screenshot 4 — Copy result flow
 - **Filename:** `04-copy-result.png`
@@ -71,6 +93,11 @@ Do not just capture random product screens. Each screenshot should communicate o
 - **Scene:** Parsed result is visible with copy affordance or copy success state
 - **Must show:** Copy button and confirmation UI if available
 - **Notes:** Make the action obvious at listing size
+- **Capture instructions:**
+  - Reuse the Base64 or timestamp scenario that produces the cleanest result UI
+  - Show the copy button clearly in the SelectLens panel
+  - If the extension displays copy feedback, capture the success state as part of the same shot
+  - Make the copy interaction readable even when scaled down in the store listing
 
 ### Screenshot 5 — Real-world debugging use case
 - **Filename:** `05-real-world-use-case.png`
@@ -78,6 +105,11 @@ Do not just capture random product screens. Each screenshot should communicate o
 - **Scene:** Example page such as API docs, logs, developer tool demo page, or technical article
 - **Must show:** Practical context, not just a blank playground page
 - **Notes:** Pick the strongest user story for the listing
+- **Capture instructions:**
+  - Choose the most believable real-world page, such as API documentation, a logs page mockup, or a technical tutorial
+  - Select content that naturally appears in that workflow, such as a timestamp in logs or Base64 in an example response
+  - Trigger SelectLens so the extension appears as part of a real debugging task
+  - Compose the screenshot to emphasize practical usage rather than a synthetic test environment
 
 ### Screenshot acceptance rules
 - [ ] Use realistic, non-sensitive content
@@ -173,9 +205,9 @@ SelectLens processes selected text locally to decode Base64 values and convert U
 
 ### Asset verification
 - [x] Icon files are present and final
-- [ ] Screenshot files are captured and approved
-- [ ] Screenshot filenames match the shot list
-- [ ] No placeholders remain
+- [x] Screenshot files are captured and approved
+- [x] Screenshot filenames match the shot list
+- [x] No placeholders remain
 
 ### Copy verification
 - [ ] Short description is ready
