@@ -8,6 +8,8 @@
 
 并支持一键复制解析结果。
 
+See [CHANGELOG.md](CHANGELOG.md) for notable changes. Future user-visible changes should be added to the changelog as part of the same update.
+
 ## 功能
 
 ### 1. Base64 自动识别与解码
