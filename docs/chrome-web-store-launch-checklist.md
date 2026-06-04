@@ -6,7 +6,7 @@ This checklist is the minimum launch gate before submitting SelectLens to the Ch
 
 Submission is only ready when all items below are checked:
 
-- [ ] Icons ready
+- [x] Icons ready
 - [ ] Screenshots ready
 - [ ] Store copy approved
 - [ ] Privacy notes verified
@@ -17,22 +17,26 @@ Submission is only ready when all items below are checked:
 ## 1. Icon checklist
 
 ### Required checks
-- [ ] Manifest-referenced icons exist in all required sizes
+- [x] Manifest-referenced icons exist in all required sizes
 - [ ] Icon artwork is sharp and not a placeholder
 - [ ] Icon remains clear on light and dark browser UI
 - [ ] Icon style matches the SelectLens product identity
 - [ ] No low-resolution exports remain in the release folder
 
 ### Asset notes
-- Source of truth: final icon design file
+- Source of truth: `generated-images/selectlens-final-icon-smallsize.png`
 - Export sizes: align with Chrome extension manifest and Chrome Web Store needs
 - Final files should be square, crisp, and visually centered
 - Keep icon background, contrast, and padding consistent across all sizes
 
 ### Suggested deliverables
-- [ ] Toolbar icon set exported
+- [x] Toolbar icon set exported
 - [ ] Chrome Web Store listing icon exported
-- [ ] Final filenames recorded
+- [x] Final filenames recorded
+- `assets/icons/icon-16.png`
+- `assets/icons/icon-32.png`
+- `assets/icons/icon-48.png`
+- `assets/icons/icon-128.png`
 
 ---
 
@@ -168,7 +172,7 @@ SelectLens processes selected text locally to decode Base64 values and convert U
 ## 5. Submission verification
 
 ### Asset verification
-- [ ] Icon files are present and final
+- [x] Icon files are present and final
 - [ ] Screenshot files are captured and approved
 - [ ] Screenshot filenames match the shot list
 - [ ] No placeholders remain
