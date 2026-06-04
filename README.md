@@ -53,6 +53,40 @@ See [CHANGELOG.md](CHANGELOG.md) for notable changes. Future user-visible change
 4. 查看解析结果
 5. 点击“复制结果”按钮
 
+## Release
+
+SelectLens 使用轻量手动发布流程，不引入额外发版自动化。
+
+### Versioning
+- 使用 SemVer：`x.y.z`
+- `manifest.json` 中的 `version` 是插件发布版本的唯一事实来源
+- Patch：bug 修复和小型非破坏性更新
+- Minor：新增用户可见功能
+- Major：不兼容变更或显著行为调整
+
+### Coordination rules
+- 没有对应 changelog 条目，不应只改版本号
+- 没有对应 tag，不应视为正式 release
+- `manifest.json` 版本、`CHANGELOG.md` 版本标题、git tag 必须一致
+
+### Release checklist
+1. 确认当前改动已完成并准备发布
+2. 更新 `manifest.json` 的 `version`
+3. 将 `CHANGELOG.md` 中的 `Unreleased` 内容整理进对应版本标题，例如 `## v0.1.1 - 2026-06-04`
+4. 重新创建新的 `Unreleased` 小节，作为下一轮迭代入口
+5. 在 Chrome 中以 unpacked extension 方式做一次 smoke test
+6. 提交 release commit，例如 `release(selectlens): v0.1.1`
+7. 创建 annotated tag，例如 `selectlens-v0.1.1`
+8. push commit 和 tag
+
+### Smoke test
+- 确认扩展可以被 Chrome 正常加载
+- 确认 manifest 无报错
+- 确认核心能力仍然可用
+- Base64 解析正常
+- 10/13 位时间戳解析正常
+- 复制功能正常
+
 ## Chrome Web Store 文案
 
 ### 标题
