@@ -4,9 +4,21 @@
   "version": "0.1.0",
   "description": "Select any text to instantly decode Base64, format timestamps, and copy results.",
   "permissions": ["activeTab", "tabs"],
+  "icons": {
+    "16": "assets/icons/icon-16.png",
+    "32": "assets/icons/icon-32.png",
+    "48": "assets/icons/icon-48.png",
+    "128": "assets/icons/icon-128.png"
+  },
   "action": {
     "default_title": "SelectLens",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "assets/icons/icon-16.png",
+      "32": "assets/icons/icon-32.png",
+      "48": "assets/icons/icon-48.png",
+      "128": "assets/icons/icon-128.png"
+    }
   },
   "content_scripts": [
     {
