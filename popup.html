@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SelectLens</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="popup">
+      <header class="popup__header">
+        <h1>SelectLens</h1>
+        <p>选中文本后，解析 Base64 或时间戳</p>
+      </header>
+
+      <section class="card">
+        <div class="row">
+          <span class="label">检测结果</span>
+          <span id="detected-type" class="badge">加载中</span>
+        </div>
+
+        <div class="block">
+          <span class="label">选中内容</span>
+          <pre id="input-preview" class="preview preview--muted">正在读取当前选区…</pre>
+        </div>
+
+        <div class="block">
+          <span class="label">解析结果</span>
+          <pre id="output-preview" class="preview">等待解析…</pre>
+        </div>
+
+        <p id="status-message" class="status">正在分析当前标签页…</p>
+
+        <button id="copy-button" class="copy-button" type="button" disabled>
+          复制结果
+        </button>
+      </section>
+    </main>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
