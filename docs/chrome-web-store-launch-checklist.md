@@ -192,6 +192,7 @@ For support, bug reports, or feature ideas, direct users to the SelectLens GitHu
 - [ ] Permission wording is understandable to non-technical reviewers
 
 ### Privacy policy notes
+- [x] Privacy policy text has been prepared in `docs/privacy-policy.md`
 - [ ] Confirm whether Chrome Web Store requires a separate privacy policy URL for the current submission setup
 - [ ] If required, prepare the URL before submission
 - [ ] If no privacy policy page exists yet, treat that as a submission blocker
