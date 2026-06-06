@@ -20,7 +20,7 @@ SelectLens uses the selected text only to provide its core functionality, includ
 - Decoding Base64 text
 - Converting 10-digit and 13-digit Unix timestamps into human-readable time
 - Displaying the parsed result in an inline floating card on the page
-- Allowing you to copy the parsed result
+- Allowing you to copy either the original selected text or the parsed result
 
 ## 3. Local Processing
 

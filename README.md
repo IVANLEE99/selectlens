@@ -6,7 +6,7 @@
 - 10 位 Unix 时间戳（秒）
 - 13 位 Unix 时间戳（毫秒）
 
-解析结果会以页面内悬浮卡片展示，并支持一键复制。
+解析结果会以页面内悬浮卡片展示，并支持一键复制原始选中内容或解析结果。
 
 See [CHANGELOG.md](CHANGELOG.md) for notable changes. Future user-visible changes should be added to the changelog as part of the same update.
 
@@ -16,13 +16,13 @@ See [CHANGELOG.md](CHANGELOG.md) for notable changes. Future user-visible change
 - 选中合法 Base64 文本
 - 页面内自动显示 SelectLens 悬浮卡片
 - 显示解码后的 UTF-8 文本
-- 支持复制完整结果
+- 支持复制原文和完整解析结果
 
 ### 2. 时间戳自动识别
 - 选中 10 位数字：按秒级时间戳解析
 - 选中 13 位数字：按毫秒级时间戳解析
 - 展示本地时间与 ISO 时间
-- 支持复制完整结果
+- 支持复制原文和完整解析结果
 
 ### 3. 轻量悬浮卡片
 - 只在识别到 Base64 或 10/13 位时间戳时显示
@@ -50,7 +50,7 @@ See [CHANGELOG.md](CHANGELOG.md) for notable changes. Future user-visible change
 1. 打开任意普通网页
 2. 选中一段 Base64 或 10/13 位时间戳
 3. 查看页面内自动出现的 SelectLens 悬浮卡片
-4. 点击“复制结果”按钮复制解析结果
+4. 点击“复制原文”复制原始选中内容，或点击“复制结果”复制解析结果
 5. 可通过关闭按钮、Esc、点击外部、滚动页面或清空选区隐藏卡片
 
 ## Release
@@ -85,8 +85,8 @@ SelectLens 使用轻量手动发布流程，不引入额外发版自动化。
 - 确认核心能力仍然可用
 - Base64 解析正常
 - 10/13 位时间戳解析正常
-- 复制功能正常
-- 悬浮卡片可正常显示与关闭
+- “复制原文”和“复制结果”功能正常
+- 悬浮卡片可正常显示与关闭，复制后关闭按钮仍可立即关闭卡片
 
 ## Chrome Web Store 文案
 

@@ -5,6 +5,7 @@ This file records notable changes to SelectLens.
 ## Unreleased
 
 ### Added
+- Added a “复制原文” action for copying the original selected text from the inline floating card.
 - Initial SelectLens MVP for detecting selected Base64 and 10/13-digit Unix timestamps, with parsing and copy support.
 - Public project documentation covering features, local loading, permissions, and Chrome Web Store copy.
 - A standalone Git repository and GitHub remote for publishing SelectLens independently.
@@ -18,4 +19,5 @@ This file records notable changes to SelectLens.
 - Renamed the local project directory from `chrome-selection-tools/` to `selectlens/`.
 
 ### Fixed
-- N/A
+- Clicking inside the inline floating card no longer dismisses it or retriggers selection analysis.
+- The close button remains stable after using copy actions, including fallback copy flows.

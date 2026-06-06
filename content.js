@@ -6,7 +6,11 @@ const SELECTION_ANALYSIS_DELAY = 180;
 let floatingCardHost = null;
 let floatingCardShadow = null;
 let selectionAnalysisTimer = null;
-let currentCopyText = '';
+let floatingCardInteractionTimer = null;
+let isSuppressingFloatingCardInteraction = false;
+let dismissedSelectionText = '';
+let currentResultCopyText = '';
+let currentOriginalCopyText = '';
 
 function normalizeSelection(rawText) {
   return typeof rawText === 'string' ? rawText.trim() : '';
@@ -185,6 +189,11 @@ function getSelectedText() {
   return '';
 }
 
+function stopFloatingCardEvent(event) {
+  suppressFloatingCardInteraction();
+  event.stopPropagation();
+}
+
 function createFloatingCardHost() {
   if (floatingCardHost && floatingCardShadow) {
     return floatingCardHost;
@@ -205,9 +214,43 @@ function createFloatingCardHost() {
   floatingCardHost.style.display = 'none';
   floatingCardHost.style.maxWidth = 'calc(100vw - 24px)';
 
+  if (!floatingCardHost.dataset.selectlensListenersAttached) {
+    floatingCardHost.addEventListener('pointerdown', stopFloatingCardEvent);
+    floatingCardHost.addEventListener('mouseup', stopFloatingCardEvent);
+    floatingCardHost.addEventListener('click', stopFloatingCardEvent);
+    floatingCardHost.addEventListener('touchend', stopFloatingCardEvent);
+    floatingCardHost.dataset.selectlensListenersAttached = 'true';
+  }
+
   floatingCardShadow = floatingCardHost.shadowRoot || floatingCardHost.attachShadow({ mode: 'open' });
 
   return floatingCardHost;
+}
+
+function isEventFromFloatingCard(event) {
+  if (!floatingCardHost) {
+    return false;
+  }
+
+  const path = typeof event.composedPath === 'function' ? event.composedPath() : [];
+  return path.includes(floatingCardHost) || floatingCardHost.contains(event.target);
+}
+
+function suppressFloatingCardInteraction() {
+  isSuppressingFloatingCardInteraction = true;
+  window.clearTimeout(floatingCardInteractionTimer);
+  floatingCardInteractionTimer = window.setTimeout(() => {
+    isSuppressingFloatingCardInteraction = false;
+  }, 350);
+}
+
+function shouldIgnoreSelectionTrigger(event) {
+  if (event && isEventFromFloatingCard(event)) {
+    suppressFloatingCardInteraction();
+    return true;
+  }
+
+  return isSuppressingFloatingCardInteraction;
 }
 
 function getFloatingCardStyles() {
@@ -369,7 +412,8 @@ function renderFloatingCard(result, anchorRect) {
   }
 
   const host = createFloatingCardHost();
-  currentCopyText = result.copyText || '';
+  currentResultCopyText = result.copyText || '';
+  currentOriginalCopyText = result.input || '';
 
   floatingCardShadow.innerHTML = `
     <style>${getFloatingCardStyles()}</style>
@@ -392,7 +436,8 @@ function renderFloatingCard(result, anchorRect) {
       </section>
       <p class="status" id="status"></p>
       <div class="actions">
-        <button class="copy" type="button">复制结果</button>
+        <button class="copy copy-original" type="button">复制原文</button>
+        <button class="copy copy-result" type="button">复制结果</button>
       </div>
     </article>
   `;
@@ -402,14 +447,26 @@ function renderFloatingCard(result, anchorRect) {
   floatingCardShadow.getElementById('output').textContent = result.outputPreview || '—';
   floatingCardShadow.getElementById('status').textContent = result.message;
 
-  floatingCardShadow.querySelector('.close').addEventListener('click', hideFloatingCard);
-  floatingCardShadow.querySelector('.copy').addEventListener('click', async () => {
-    const copied = await copyResultText(currentCopyText);
+  floatingCardShadow.querySelector('.close').addEventListener('click', (event) => {
+    suppressFloatingCardInteraction();
+    event.stopPropagation();
+    dismissFloatingCard();
+  });
+  floatingCardShadow.querySelector('.copy-original').addEventListener('click', async (event) => {
+    suppressFloatingCardInteraction();
+    event.stopPropagation();
+    const copied = await copyResultText(currentOriginalCopyText);
     const statusElement = floatingCardShadow.getElementById('status');
-    statusElement.textContent = copied ? '复制成功。' : '复制失败，请重试。';
+    statusElement.textContent = copied ? '原文已复制。' : '复制失败，请重试。';
+  });
+  floatingCardShadow.querySelector('.copy-result').addEventListener('click', async (event) => {
+    suppressFloatingCardInteraction();
+    event.stopPropagation();
+    const copied = await copyResultText(currentResultCopyText);
+    const statusElement = floatingCardShadow.getElementById('status');
+    statusElement.textContent = copied ? '解析结果已复制。' : '复制失败，请重试。';
   });
 
-  host.addEventListener('pointerdown', (event) => event.stopPropagation());
   host.style.display = 'block';
   host.style.visibility = 'hidden';
   positionFloatingCard(anchorRect);
@@ -444,11 +501,20 @@ function positionFloatingCard(anchorRect) {
 }
 
 function hideFloatingCard() {
-  currentCopyText = '';
+  window.clearTimeout(selectionAnalysisTimer);
+  selectionAnalysisTimer = null;
+  currentResultCopyText = '';
+  currentOriginalCopyText = '';
 
   if (floatingCardHost) {
     floatingCardHost.style.display = 'none';
   }
+}
+
+function dismissFloatingCard() {
+  dismissedSelectionText = normalizeSelection(getSelectedText());
+  suppressFloatingCardInteraction();
+  hideFloatingCard();
 }
 
 async function copyResultText(text) {
@@ -465,6 +531,20 @@ async function copyResultText(text) {
 }
 
 function fallbackCopyText(text) {
+  suppressFloatingCardInteraction();
+
+  const activeElement = document.activeElement;
+  const selection = window.getSelection();
+  const ranges = selection ? Array.from({ length: selection.rangeCount }, (_, index) => selection.getRangeAt(index)) : [];
+  const inputSelection = activeElement &&
+    (activeElement.tagName === 'TEXTAREA' || activeElement.tagName === 'INPUT') &&
+    typeof activeElement.selectionStart === 'number'
+      ? {
+          element: activeElement,
+          start: activeElement.selectionStart,
+          end: activeElement.selectionEnd
+        }
+      : null;
   const textarea = document.createElement('textarea');
   textarea.value = text;
   textarea.setAttribute('readonly', '');
@@ -480,6 +560,20 @@ function fallbackCopyText(text) {
     return false;
   } finally {
     textarea.remove();
+
+    if (selection) {
+      selection.removeAllRanges();
+      ranges.forEach((range) => selection.addRange(range));
+    }
+
+    if (inputSelection) {
+      inputSelection.element.focus();
+      inputSelection.element.setSelectionRange(inputSelection.start, inputSelection.end);
+    } else if (activeElement && typeof activeElement.focus === 'function') {
+      activeElement.focus();
+    }
+
+    suppressFloatingCardInteraction();
   }
 }
 
@@ -519,7 +613,21 @@ function getSelectionAnchorRect() {
 }
 
 function analyzeCurrentSelection() {
+  if (isSuppressingFloatingCardInteraction) {
+    return;
+  }
+
   const selectedText = getSelectedText();
+  const normalizedSelectedText = normalizeSelection(selectedText);
+
+  if (dismissedSelectionText && dismissedSelectionText === normalizedSelectedText) {
+    return;
+  }
+
+  if (dismissedSelectionText && dismissedSelectionText !== normalizedSelectedText) {
+    dismissedSelectionText = '';
+  }
+
   const result = analyzeSelection(selectedText);
 
   if (!SUPPORTED_RESULT_TYPES.has(result.type)) {
@@ -530,28 +638,34 @@ function analyzeCurrentSelection() {
   renderFloatingCard(result, getSelectionAnchorRect());
 }
 
-function scheduleSelectionAnalysis(delay = SELECTION_ANALYSIS_DELAY) {
+function scheduleSelectionAnalysis(delay = SELECTION_ANALYSIS_DELAY, event = null) {
+  if (shouldIgnoreSelectionTrigger(event)) {
+    return;
+  }
+
   window.clearTimeout(selectionAnalysisTimer);
   selectionAnalysisTimer = window.setTimeout(analyzeCurrentSelection, delay);
 }
 
 function handlePointerDown(event) {
-  if (floatingCardHost && floatingCardHost.contains(event.target)) {
+  if (shouldIgnoreSelectionTrigger(event)) {
     return;
   }
 
-  hideFloatingCard();
+  if (floatingCardHost && floatingCardHost.style.display !== 'none') {
+    hideFloatingCard();
+  }
 }
 
-document.addEventListener('selectionchange', () => scheduleSelectionAnalysis());
-document.addEventListener('mouseup', () => scheduleSelectionAnalysis(0));
-document.addEventListener('keyup', () => scheduleSelectionAnalysis(0));
-document.addEventListener('touchend', () => scheduleSelectionAnalysis(0));
+document.addEventListener('selectionchange', (event) => scheduleSelectionAnalysis(SELECTION_ANALYSIS_DELAY, event));
+document.addEventListener('mouseup', (event) => scheduleSelectionAnalysis(0, event));
+document.addEventListener('keyup', (event) => scheduleSelectionAnalysis(0, event));
+document.addEventListener('touchend', (event) => scheduleSelectionAnalysis(0, event));
 document.addEventListener('pointerdown', handlePointerDown, true);
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') {
-    hideFloatingCard();
+    dismissFloatingCard();
   }
 });
-window.addEventListener('scroll', hideFloatingCard, true);
-window.addEventListener('resize', hideFloatingCard);
+window.addEventListener('scroll', dismissFloatingCard, true);
+window.addEventListener('resize', dismissFloatingCard);
