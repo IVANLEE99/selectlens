@@ -3,6 +3,9 @@
   "name": "SelectLens",
   "version": "0.1.0",
   "description": "Select any text to instantly decode Base64, format timestamps, and copy results.",
+  "permissions": [
+    "contextMenus"
+  ],
   "icons": {
     "16": "assets/icons/icon-16.png",
     "32": "assets/icons/icon-32.png",
@@ -18,10 +21,17 @@
       "128": "assets/icons/icon-128.png"
     }
   },
+  "background": {
+    "service_worker": "background.js"
+  },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
       "run_at": "document_idle"
     }
   ]

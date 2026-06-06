@@ -2,6 +2,7 @@ const MAX_PREVIEW_LENGTH = 240;
 const FLOATING_CARD_HOST_ID = 'selectlens-floating-card-host';
 const SUPPORTED_RESULT_TYPES = new Set(['base64', 'timestamp10', 'timestamp13']);
 const SELECTION_ANALYSIS_DELAY = 180;
+const CONTEXT_MENU_ANALYZE_MESSAGE_TYPE = 'SELECTLENS_CONTEXT_MENU_ANALYZE';
 
 let floatingCardHost = null;
 let floatingCardShadow = null;
@@ -612,6 +613,33 @@ function getSelectionAnchorRect() {
   return rects.length ? rects[rects.length - 1] : null;
 }
 
+function getViewportFallbackRect() {
+  const left = Math.round(window.innerWidth / 2);
+  const top = Math.max(12, Math.round(window.innerHeight * 0.25));
+
+  return {
+    left,
+    right: left,
+    top,
+    bottom: top,
+    width: 0,
+    height: 0
+  };
+}
+
+function analyzeTextFromContextMenu(rawText) {
+  dismissedSelectionText = '';
+
+  const result = analyzeSelection(rawText);
+
+  if (!SUPPORTED_RESULT_TYPES.has(result.type)) {
+    hideFloatingCard();
+    return;
+  }
+
+  renderFloatingCard(result, getSelectionAnchorRect() || getViewportFallbackRect());
+}
+
 function analyzeCurrentSelection() {
   if (isSuppressingFloatingCardInteraction) {
     return;
@@ -655,6 +683,14 @@ function handlePointerDown(event) {
   if (floatingCardHost && floatingCardHost.style.display !== 'none') {
     hideFloatingCard();
   }
+}
+
+if (typeof chrome !== 'undefined' && chrome.runtime?.onMessage) {
+  chrome.runtime.onMessage.addListener((message) => {
+    if (message?.type === CONTEXT_MENU_ANALYZE_MESSAGE_TYPE) {
+      analyzeTextFromContextMenu(message.text || '');
+    }
+  });
 }
 
 document.addEventListener('selectionchange', (event) => scheduleSelectionAnalysis(SELECTION_ANALYSIS_DELAY, event));

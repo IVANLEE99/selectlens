@@ -5,6 +5,8 @@ This file records notable changes to SelectLens.
 ## Unreleased
 
 ### Added
+- Added a selection right-click menu for manually triggering SelectLens parsing on selected text.
+- Added the `contextMenus` permission for the selection context menu entry.
 - Added a “复制原文” action for copying the original selected text from the inline floating card.
 - Initial SelectLens MVP for detecting selected Base64 and 10/13-digit Unix timestamps, with parsing and copy support.
 - Public project documentation covering features, local loading, permissions, and Chrome Web Store copy.

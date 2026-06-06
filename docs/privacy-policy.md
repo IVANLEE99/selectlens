@@ -1,6 +1,6 @@
 # Privacy Policy for SelectLens
 
-_Last updated: 2026-06-05_
+_Last updated: 2026-06-06_
 
 SelectLens is a lightweight browser extension designed to help users inspect selected text on webpages. This Privacy Policy explains what information SelectLens accesses, how it is used, and what SelectLens does **not** do with your data.
 
@@ -20,6 +20,7 @@ SelectLens uses the selected text only to provide its core functionality, includ
 - Decoding Base64 text
 - Converting 10-digit and 13-digit Unix timestamps into human-readable time
 - Displaying the parsed result in an inline floating card on the page
+- Providing a right-click context menu entry for text you intentionally select
 - Allowing you to copy either the original selected text or the parsed result
 
 ## 3. Local Processing
@@ -42,15 +43,16 @@ SelectLens does not sell, rent, or share your selected text with third parties a
 
 ## 6. Permissions Used
 
-SelectLens currently does not request additional Chrome extension permissions in `manifest.json`.
+SelectLens requests the `contextMenus` permission so it can show a right-click menu entry when you intentionally select text.
 
-Its content script runs on supported webpages so it can detect text that you intentionally select and show the local inline result card. It does not use this access to upload selected text, store browsing history, or track you across websites.
+Its content script runs on supported webpages so it can detect text that you intentionally select and show the local inline result card. The context menu only provides a user-triggered entry point for the same local parsing flow. SelectLens does not use this access to upload selected text, store browsing history, or track you across websites.
 
 ## 7. User Control
 
 You control when SelectLens is used:
 
 - You choose what text to select
+- You choose whether to use the automatic inline card or the right-click context menu trigger
 - The inline card only appears for supported selected text, such as Base64 or 10/13-digit Unix timestamps
 - You can close the inline card, clear the selection, or remove the extension from your browser at any time
 

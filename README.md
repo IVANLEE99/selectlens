@@ -29,9 +29,15 @@ See [CHANGELOG.md](CHANGELOG.md) for notable changes. Future user-visible change
 - 使用 Shadow DOM 隔离样式，避免影响网页本身
 - 支持关闭按钮、Esc、点击外部、滚动或窗口变化时隐藏
 
+### 4. 右键菜单触发
+- 选中文本后可右键选择“用 SelectLens 解析选中文本”
+- 复用同一张页面内悬浮卡片展示结果
+- 适合自动弹窗被关闭后，对同一段选中文本再次手动触发解析
+
 ## 目录结构
 
 - `manifest.json`：Chrome Extension Manifest V3 配置
+- `background.js`：创建选中文本右键菜单，并把右键触发事件转发给 content script
 - `content.js`：读取页面选区、执行解析，并渲染页面内悬浮卡片
 - `popup.html` / `popup.css` / `popup.js`：旧版 popup 交互文件，当前 manifest 不再引用，保留作短期参考
 - `assets/icons/`：扩展图标资源
@@ -50,8 +56,9 @@ See [CHANGELOG.md](CHANGELOG.md) for notable changes. Future user-visible change
 1. 打开任意普通网页
 2. 选中一段 Base64 或 10/13 位时间戳
 3. 查看页面内自动出现的 SelectLens 悬浮卡片
-4. 点击“复制原文”复制原始选中内容，或点击“复制结果”复制解析结果
-5. 可通过关闭按钮、Esc、点击外部、滚动页面或清空选区隐藏卡片
+4. 也可以右键选择“用 SelectLens 解析选中文本”手动触发解析
+5. 点击“复制原文”复制原始选中内容，或点击“复制结果”复制解析结果
+6. 可通过关闭按钮、Esc、点击外部、滚动页面或清空选区隐藏卡片
 
 ## Release
 
@@ -85,6 +92,7 @@ SelectLens 使用轻量手动发布流程，不引入额外发版自动化。
 - 确认核心能力仍然可用
 - Base64 解析正常
 - 10/13 位时间戳解析正常
+- 选中文本右键菜单触发解析正常
 - “复制原文”和“复制结果”功能正常
 - 悬浮卡片可正常显示与关闭，复制后关闭按钮仍可立即关闭卡片
 
@@ -101,7 +109,7 @@ SelectLens helps you inspect selected text directly on webpages. Instantly decod
 
 ## 权限说明
 
-SelectLens 当前不请求额外 Chrome 扩展权限。扩展通过 content script 在普通网页中检测用户主动选中的文本，并在本地渲染解析结果。
+SelectLens 当前请求 `contextMenus` 权限，用于在用户主动选中文本时提供“用 SelectLens 解析选中文本”的右键菜单入口。扩展通过 content script 在普通网页中检测用户主动选中的文本，并在本地渲染解析结果。
 
 ## 已知限制
 
@@ -112,7 +120,6 @@ SelectLens 当前不请求额外 Chrome 扩展权限。扩展通过 content scri
 
 ## 后续可扩展方向
 
-- 右键菜单触发
 - URL-safe Base64 支持
 - JWT / URL Decode / JSON Format 等更多调试工具
 - 悬浮卡片位置和动效进一步优化
