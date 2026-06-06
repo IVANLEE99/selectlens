@@ -3,7 +3,6 @@
   "name": "SelectLens",
   "version": "0.1.0",
   "description": "Select any text to instantly decode Base64, format timestamps, and copy results.",
-  "permissions": ["activeTab", "tabs"],
   "icons": {
     "16": "assets/icons/icon-16.png",
     "32": "assets/icons/icon-32.png",
@@ -12,7 +11,6 @@
   },
   "action": {
     "default_title": "SelectLens",
-    "default_popup": "popup.html",
     "default_icon": {
       "16": "assets/icons/icon-16.png",
       "32": "assets/icons/icon-32.png",

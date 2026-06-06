@@ -1,6 +1,6 @@
 # Privacy Policy for SelectLens
 
-_Last updated: 2026-06-04_
+_Last updated: 2026-06-05_
 
 SelectLens is a lightweight browser extension designed to help users inspect selected text on webpages. This Privacy Policy explains what information SelectLens accesses, how it is used, and what SelectLens does **not** do with your data.
 
@@ -9,7 +9,7 @@ SelectLens is a lightweight browser extension designed to help users inspect sel
 SelectLens may access:
 
 - The text that you intentionally select on the current webpage
-- The current active tab context required for the extension to communicate with the page
+- The webpage context needed by the content script to display the inline result card near your selection
 
 SelectLens does **not** require an account, login, or personal profile to work.
 
@@ -19,7 +19,7 @@ SelectLens uses the selected text only to provide its core functionality, includ
 
 - Decoding Base64 text
 - Converting 10-digit and 13-digit Unix timestamps into human-readable time
-- Displaying the parsed result in the extension popup
+- Displaying the parsed result in an inline floating card on the page
 - Allowing you to copy the parsed result
 
 ## 3. Local Processing
@@ -42,20 +42,17 @@ SelectLens does not sell, rent, or share your selected text with third parties a
 
 ## 6. Permissions Used
 
-SelectLens currently uses the following Chrome extension permissions:
+SelectLens currently does not request additional Chrome extension permissions in `manifest.json`.
 
-- `activeTab` — used so SelectLens can interact with the page you are actively viewing when you invoke the extension
-- `tabs` — used to identify the active tab and coordinate communication between the popup and the page content
-
-These permissions are used only to support the extension’s core functionality.
+Its content script runs on supported webpages so it can detect text that you intentionally select and show the local inline result card. It does not use this access to upload selected text, store browsing history, or track you across websites.
 
 ## 7. User Control
 
 You control when SelectLens is used:
 
 - You choose what text to select
-- You choose when to open the extension popup
-- You can remove the extension from your browser at any time
+- The inline card only appears for supported selected text, such as Base64 or 10/13-digit Unix timestamps
+- You can close the inline card, clear the selection, or remove the extension from your browser at any time
 
 ## 8. Changes to This Policy
 

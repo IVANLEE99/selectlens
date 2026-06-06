@@ -7,7 +7,7 @@ This checklist is the minimum launch gate before submitting SelectLens to the Ch
 Submission is only ready when all items below are checked:
 
 - [x] Icons ready
-- [x] Screenshots ready
+- [ ] Screenshots ready — needs inline-card recapture
 - [ ] Store copy approved
 - [ ] Privacy notes verified
 - [ ] Final submission review complete
@@ -60,7 +60,7 @@ Do not just capture random product screens. Each screenshot should communicate o
 - **Capture instructions:**
   - Use a clean technical article, documentation page, or simple demo page
   - Select a short Base64 string or timestamp that is visually easy to spot
-  - Trigger SelectLens so the extension response is visible next to the selected text
+  - SelectLens should automatically show the inline floating card next to the selected text
   - Frame the shot so users can immediately understand “select text → get insight”
 
 ### Screenshot 2 — Base64 parsing result
@@ -84,7 +84,7 @@ Do not just capture random product screens. Each screenshot should communicate o
 - **Capture instructions:**
   - Use a page that looks like logs, API docs, or a realistic debugging example
   - Select a 10-digit or 13-digit Unix timestamp from the page content
-  - Trigger SelectLens and show the readable converted time in the result UI
+  - SelectLens should automatically show the readable converted time in the inline floating card
   - Keep both the raw timestamp and the parsed time visible in the same composition
 
 ### Screenshot 4 — Copy result flow
@@ -108,7 +108,7 @@ Do not just capture random product screens. Each screenshot should communicate o
 - **Capture instructions:**
   - Choose the most believable real-world page, such as API documentation, a logs page mockup, or a technical tutorial
   - Select content that naturally appears in that workflow, such as a timestamp in logs or Base64 in an example response
-  - Trigger SelectLens so the extension appears as part of a real debugging task
+  - SelectLens should automatically appear as part of a real debugging task after text selection
   - Compose the screenshot to emphasize practical usage rather than a synthetic test environment
 
 ### Screenshot acceptance rules
@@ -151,8 +151,7 @@ Built for developers, testers, operators, and anyone who frequently works with e
 - Lightweight inspection during day-to-day web debugging
 
 ### Permissions explanation
-- `activeTab`: lets SelectLens interact with the current page when you use the extension
-- `tabs`: helps the extension identify the active tab and communicate with the page content
+SelectLens currently does not request extra Chrome extension permissions. It uses a content script on supported webpages to detect text that the user intentionally selects, process it locally, and display an inline floating card near the selection.
 
 ### Support / feedback line
 For support, bug reports, or feature ideas, direct users to the SelectLens GitHub repository.
@@ -169,11 +168,11 @@ For support, bug reports, or feature ideas, direct users to the SelectLens GitHu
 
 ### Data accessed
 - Selected text on the current page
-- Current active tab context required for extension-page communication
+- Webpage context needed to render the inline floating card near the selection
 
 ### Data purpose
 - Selected text is needed to detect and parse Base64 or Unix timestamps
-- Active tab access is needed to request the current selection from the page
+- Page context is used locally to position and display the inline result card
 
 ### Data processing
 - Current planned behavior: processing happens locally in the extension
@@ -206,9 +205,9 @@ SelectLens processes selected text locally to decode Base64 values and convert U
 
 ### Asset verification
 - [x] Icon files are present and final
-- [x] Screenshot files are captured and approved
-- [x] Screenshot filenames match the shot list
-- [x] No placeholders remain
+- [ ] Screenshot files are captured and approved for the inline-card UI
+- [ ] Screenshot filenames match the shot list for the inline-card UI
+- [ ] No placeholders remain
 
 ### Copy verification
 - [ ] Short description is ready

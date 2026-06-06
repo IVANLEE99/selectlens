@@ -12,6 +12,8 @@ This file records notable changes to SelectLens.
 - Added Chrome Web Store screenshot assets covering trigger flow, Base64 decoding, timestamp parsing, copy flow, and a real-world debugging use case.
 
 ### Changed
+- Upgraded SelectLens from toolbar popup results to an inline floating card that appears after selecting supported text.
+- Removed the popup-triggered `activeTab` / `tabs` permission flow from `manifest.json` for the inline-card MVP.
 - Renamed the project and extension branding from the generic working name to **SelectLens**.
 - Renamed the local project directory from `chrome-selection-tools/` to `selectlens/`.
 
