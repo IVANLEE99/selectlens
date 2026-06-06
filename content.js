@@ -18,7 +18,22 @@ function normalizeSelection(rawText) {
 }
 
 function normalizeBase64Candidate(text) {
-  return text.replace(/\s+/g, '');
+  const candidate = text.replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/');
+  const paddingRemainder = candidate.length % 4;
+
+  if (paddingRemainder === 1) {
+    return null;
+  }
+
+  if (paddingRemainder === 2) {
+    return `${candidate}==`;
+  }
+
+  if (paddingRemainder === 3) {
+    return `${candidate}=`;
+  }
+
+  return candidate;
 }
 
 function isDigitsOnly(text) {
@@ -61,11 +76,11 @@ function parseTimestamp(text) {
 }
 
 function isLikelyBase64(text) {
-  if (text.length < 8 || text.length % 4 !== 0) {
+  if (!text || text.length < 8 || text.length % 4 !== 0) {
     return false;
   }
 
-  return /^[A-Za-z0-9+/]+=*$/.test(text);
+  return /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(text);
 }
 
 function decodeBase64(text) {

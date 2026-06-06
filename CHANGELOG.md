@@ -5,6 +5,7 @@ This file records notable changes to SelectLens.
 ## Unreleased
 
 ### Added
+- Added support for URL-safe Base64 decoding, including common unpadded URL-safe values.
 - Added a selection right-click menu for manually triggering SelectLens parsing on selected text.
 - Added the `contextMenus` permission for the selection context menu entry.
 - Added a “复制原文” action for copying the original selected text from the inline floating card.
