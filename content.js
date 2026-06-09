@@ -1,6 +1,6 @@
 const MAX_PREVIEW_LENGTH = 240;
 const FLOATING_CARD_HOST_ID = 'selectlens-floating-card-host';
-const SUPPORTED_RESULT_TYPES = new Set(['base64', 'timestamp10', 'timestamp13']);
+const SUPPORTED_RESULT_TYPES = new Set(['base64', 'timestamp10', 'timestamp13', 'jwt']);
 const SELECTION_ANALYSIS_DELAY = 180;
 const CONTEXT_MENU_ANALYZE_MESSAGE_TYPE = 'SELECTLENS_CONTEXT_MENU_ANALYZE';
 
@@ -115,6 +115,79 @@ function parseBase64(text) {
   };
 }
 
+function isLikelyJwtSegment(text) {
+  return /^[A-Za-z0-9_-]+$/.test(text);
+}
+
+function decodeBase64UrlJson(segment) {
+  if (!isLikelyJwtSegment(segment)) {
+    return null;
+  }
+
+  const candidate = normalizeBase64Candidate(segment);
+
+  if (!candidate || candidate.length % 4 !== 0 || !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(candidate)) {
+    return null;
+  }
+
+  const decoded = decodeBase64(candidate);
+
+  if (!decoded) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(decoded);
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : null;
+  } catch (error) {
+    return null;
+  }
+}
+
+function formatJson(value) {
+  return JSON.stringify(value, null, 2);
+}
+
+function parseJwt(text) {
+  if (/\s/.test(text)) {
+    return null;
+  }
+
+  const segments = text.split('.');
+
+  if (segments.length !== 3 || segments.some((segment) => !segment)) {
+    return null;
+  }
+
+  const [headerSegment, payloadSegment, signatureSegment] = segments;
+
+  if (!isLikelyJwtSegment(signatureSegment)) {
+    return null;
+  }
+
+  const header = decodeBase64UrlJson(headerSegment);
+  const payload = decodeBase64UrlJson(payloadSegment);
+
+  if (!header || !payload) {
+    return null;
+  }
+
+  const output = `Header:
+${formatJson(header)}
+
+Payload:
+${formatJson(payload)}
+
+Signature:
+Present, not verified.`;
+
+  return {
+    type: 'jwt',
+    label: 'JWT',
+    output
+  };
+}
+
 function truncateText(text) {
   if (text.length <= MAX_PREVIEW_LENGTH) {
     return text;
@@ -152,6 +225,19 @@ function analyzeSelection(rawText) {
     };
   }
 
+  const jwtResult = parseJwt(input);
+
+  if (jwtResult) {
+    return {
+      ...jwtResult,
+      input,
+      inputPreview: truncateText(input),
+      outputPreview: truncateText(jwtResult.output),
+      copyText: jwtResult.output,
+      message: '已识别为 JWT。签名仅解码展示，未验证。'
+    };
+  }
+
   const base64Result = parseBase64(input);
 
   if (base64Result) {
@@ -173,7 +259,7 @@ function analyzeSelection(rawText) {
     output: '',
     outputPreview: '',
     copyText: '',
-    message: '当前选中内容不是支持的 Base64 或 10/13 位时间戳。'
+    message: '当前选中内容不是支持的 Base64、JWT 或 10/13 位时间戳。'
   };
 }
 

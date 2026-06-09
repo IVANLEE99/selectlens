@@ -5,6 +5,7 @@ This file records notable changes to SelectLens.
 ## Unreleased
 
 ### Added
+- Added local JWT decoding for compact three-part tokens, including formatted header/payload output and an explicit unverified-signature notice.
 - Added support for URL-safe Base64 decoding, including common unpadded URL-safe values.
 - Added a selection right-click menu for manually triggering SelectLens parsing on selected text.
 - Added the `contextMenus` permission for the selection context menu entry.

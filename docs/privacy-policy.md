@@ -1,6 +1,6 @@
 # Privacy Policy for SelectLens
 
-_Last updated: 2026-06-06_
+_Last updated: 2026-06-07_
 
 SelectLens is a lightweight browser extension designed to help users inspect selected text on webpages. This Privacy Policy explains what information SelectLens accesses, how it is used, and what SelectLens does **not** do with your data.
 
@@ -17,7 +17,7 @@ SelectLens does **not** require an account, login, or personal profile to work.
 
 SelectLens uses the selected text only to provide its core functionality, including:
 
-- Decoding Base64 text
+- Decoding Base64 text and JWT header/payload data locally
 - Converting 10-digit and 13-digit Unix timestamps into human-readable time
 - Displaying the parsed result in an inline floating card on the page
 - Providing a right-click context menu entry for text you intentionally select
@@ -25,9 +25,9 @@ SelectLens uses the selected text only to provide its core functionality, includ
 
 ## 3. Local Processing
 
-At the current stage, SelectLens processes selected text locally in the browser extension.
+At the current stage, SelectLens processes selected text locally in the browser extension, including Base64 and JWT decoding.
 
-SelectLens does **not** send the selected text to remote APIs or external servers as part of its current functionality.
+SelectLens does **not** send the selected text, decoded JWT claims, or parsed results to remote APIs or external servers as part of its current functionality.
 
 ## 4. Data Storage
 
