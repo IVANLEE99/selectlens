@@ -7,9 +7,9 @@ This checklist is the minimum launch gate before submitting SelectLens to the Ch
 Submission is only ready when all items below are checked:
 
 - [x] Icons ready
-- [ ] Screenshots ready — needs inline-card recapture
-- [ ] Store copy approved
-- [ ] Privacy notes verified
+- [ ] Screenshots ready — needs inline-card recapture for Base64, JWT, timestamp, copy, and real-world flows
+- [ ] Store copy approved — update includes Base64, JWT, timestamp, copy, right-click trigger, and local processing claims
+- [ ] Privacy notes verified — includes `contextMenus` permission and local JWT decoding
 - [ ] Final submission review complete
 
 ---
@@ -59,7 +59,7 @@ Do not just capture random product screens. Each screenshot should communicate o
 - **Notes:** This should explain the product in one glance
 - **Capture instructions:**
   - Use a clean technical article, documentation page, or simple demo page
-  - Select a short Base64 string or timestamp that is visually easy to spot
+  - Select a short Base64 string, JWT, or timestamp that is visually easy to spot
   - SelectLens should automatically show the inline floating card next to the selected text
   - Frame the shot so users can immediately understand “select text → get insight”
 
@@ -87,8 +87,20 @@ Do not just capture random product screens. Each screenshot should communicate o
   - SelectLens should automatically show the readable converted time in the inline floating card
   - Keep both the raw timestamp and the parsed time visible in the same composition
 
-### Screenshot 4 — Copy result flow
-- **Filename:** `04-copy-result.png`
+### Screenshot 4 — JWT decoding result
+- **Filename:** `04-jwt-result.png`
+- **Goal:** Show local JWT inspection value
+- **Scene:** A compact three-part JWT is selected and decoded in the inline card
+- **Must show:** Selected JWT + formatted header/payload output + unverified-signature notice
+- **Notes:** Make clear this is local decoding, not signature verification
+- **Capture instructions:**
+  - Use the demo page JWT sample or a realistic non-sensitive API token example
+  - Select the full JWT token so the inline card appears
+  - Ensure the decoded header/payload JSON is readable
+  - Keep the “signature not verified” message visible to avoid implying cryptographic validation
+
+### Screenshot 5 — Copy result flow
+- **Filename:** `05-copy-result.png`
 - **Goal:** Show the one-click copy workflow
 - **Scene:** Parsed result is visible with copy affordance or copy success state
 - **Must show:** Copy button and confirmation UI if available
@@ -99,15 +111,15 @@ Do not just capture random product screens. Each screenshot should communicate o
   - If the extension displays copy feedback, capture the success state as part of the same shot
   - Make the copy interaction readable even when scaled down in the store listing
 
-### Screenshot 5 — Real-world debugging use case
-- **Filename:** `05-real-world-use-case.png`
+### Screenshot 6 — Real-world debugging use case
+- **Filename:** `06-real-world-use-case.png`
 - **Goal:** Show SelectLens in an authentic workflow
 - **Scene:** Example page such as API docs, logs, developer tool demo page, or technical article
 - **Must show:** Practical context, not just a blank playground page
 - **Notes:** Pick the strongest user story for the listing
 - **Capture instructions:**
   - Choose the most believable real-world page, such as API documentation, a logs page mockup, or a technical tutorial
-  - Select content that naturally appears in that workflow, such as a timestamp in logs or Base64 in an example response
+  - Select content that naturally appears in that workflow, such as a timestamp in logs, Base64 in an example response, or a JWT in an API sample
   - SelectLens should automatically appear as part of a real debugging task after text selection
   - Compose the screenshot to emphasize practical usage rather than a synthetic test environment
 
@@ -127,18 +139,19 @@ Do not just capture random product screens. Each screenshot should communicate o
 **SelectLens**
 
 ### One-line value proposition
-Select text on any page and instantly decode Base64, format timestamps, and copy the result.
+Select text on any page and instantly decode Base64 and JWTs, format timestamps, and copy the result.
 
 ### Short description
-Select any text to instantly decode Base64, format timestamps, and copy results.
+Select any text to instantly decode Base64 and JWTs, format timestamps, and copy results.
 
 ### Full description
-SelectLens helps you inspect selected text directly on webpages. It can decode Base64, convert 10-digit and 13-digit Unix timestamps into readable time, and let you copy the parsed result with one click.
+SelectLens helps you inspect selected text directly on webpages. It can decode standard and URL-safe Base64, decode JWT header/payload data locally, convert 10-digit and 13-digit Unix timestamps into readable time, and let you copy the parsed result with one click.
 
-Built for developers, testers, operators, and anyone who frequently works with encoded strings or raw timestamps online, SelectLens reduces context switching and makes common debugging tasks faster.
+Built for developers, testers, operators, and anyone who frequently works with encoded strings, JWTs, or raw timestamps online, SelectLens reduces context switching and makes common debugging tasks faster.
 
 ### Key feature bullets
-- Decode selected Base64 text instantly
+- Decode selected standard and URL-safe Base64 text instantly
+- Decode JWT header and payload data locally, with signature clearly marked as not verified
 - Convert 10-digit and 13-digit Unix timestamps
 - Copy parsed results with one click
 - Lightweight workflow directly inside the browser
@@ -147,11 +160,12 @@ Built for developers, testers, operators, and anyone who frequently works with e
 ### Typical use cases
 - Reading timestamps in logs or API examples
 - Decoding Base64 values from docs, responses, or tutorials
+- Inspecting JWT header and payload claims without leaving the current page
 - Quickly copying parsed output into notes, chat, or tickets
 - Lightweight inspection during day-to-day web debugging
 
 ### Permissions explanation
-SelectLens currently does not request extra Chrome extension permissions. It uses a content script on supported webpages to detect text that the user intentionally selects, process it locally, and display an inline floating card near the selection.
+SelectLens requests the `contextMenus` permission to show a right-click menu entry when the user intentionally selects text. It uses a content script on supported webpages to detect selected text, process it locally, and display an inline floating card near the selection. No network permission or remote parsing service is used.
 
 ### Support / feedback line
 For support, bug reports, or feature ideas, direct users to the SelectLens GitHub repository.
@@ -171,7 +185,7 @@ For support, bug reports, or feature ideas, direct users to the SelectLens GitHu
 - Webpage context needed to render the inline floating card near the selection
 
 ### Data purpose
-- Selected text is needed to detect and parse Base64 or Unix timestamps
+- Selected text is needed to detect and parse Base64, JWTs, or Unix timestamps
 - Page context is used locally to position and display the inline result card
 
 ### Data processing
@@ -197,7 +211,7 @@ For support, bug reports, or feature ideas, direct users to the SelectLens GitHu
 - [ ] If no privacy policy page exists yet, treat that as a submission blocker
 
 ### User-facing privacy summary draft
-SelectLens processes selected text locally to decode Base64 values and convert Unix timestamps. It does not need an account to work. If future versions add remote services, storage, or analytics, the privacy description must be updated before release.
+SelectLens processes selected text locally to decode Base64 values, decode JWT header/payload data, and convert Unix timestamps. It does not verify JWT signatures, does not send selected text or decoded claims to remote servers, and does not need an account to work. If future versions add remote services, storage, or analytics, the privacy description must be updated before release.
 
 ---
 
