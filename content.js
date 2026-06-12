@@ -368,9 +368,12 @@ function getFloatingCardStyles() {
     }
 
     .card {
+      display: flex;
+      flex-direction: column;
       width: min(340px, calc(100vw - 24px));
-      max-height: min(320px, calc(100vh - 24px));
-      overflow: auto;
+      min-height: 160px;
+      max-height: min(420px, calc(100vh - 24px));
+      overflow: hidden;
       padding: 14px;
       color: #111827;
       background: #ffffff;
@@ -383,10 +386,17 @@ function getFloatingCardStyles() {
 
     .header {
       display: flex;
+      flex: 0 0 auto;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
       margin-bottom: 10px;
+    }
+
+    .body {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: auto;
     }
 
     .brand {
@@ -437,6 +447,8 @@ function getFloatingCardStyles() {
 
     .badge {
       display: inline-block;
+      flex: 0 0 auto;
+      align-self: flex-start;
       margin-bottom: 10px;
       padding: 3px 9px;
       color: #1d4ed8;
@@ -477,15 +489,19 @@ function getFloatingCardStyles() {
     }
 
     .status {
+      flex: 0 0 auto;
       margin: 10px 0 0;
+      padding-top: 10px;
+      border-top: 1px solid #e2e8f0;
       color: #475569;
       font-size: 12px;
     }
 
     .actions {
       display: flex;
+      flex: 0 0 auto;
       gap: 8px;
-      margin-top: 12px;
+      margin-top: 10px;
     }
 
     .copy {
@@ -528,14 +544,16 @@ function renderFloatingCard(result, anchorRect) {
         <button class="close" type="button" aria-label="关闭">×</button>
       </header>
       <span class="badge" id="type"></span>
-      <section class="section">
-        <span class="label">选中内容</span>
-        <pre class="preview preview--muted" id="input"></pre>
-      </section>
-      <section class="section">
-        <span class="label">解析结果</span>
-        <pre class="preview" id="output"></pre>
-      </section>
+      <div class="body">
+        <section class="section">
+          <span class="label">选中内容</span>
+          <pre class="preview preview--muted" id="input"></pre>
+        </section>
+        <section class="section">
+          <span class="label">解析结果</span>
+          <pre class="preview" id="output"></pre>
+        </section>
+      </div>
       <p class="status" id="status"></p>
       <div class="actions">
         <button class="copy copy-original" type="button">复制原文</button>
